@@ -24,7 +24,7 @@ long refreshtime = millis();
 long buttontime = millis();
 
 float weight;
-float desire;
+float desire = 0;
 float weightPrint;
 float old = 0;
 float zeroofs;
@@ -77,22 +77,22 @@ void loop(){
   zero = !debounce(zeropin);
 
   //tares the scale - sets the current weight as relative zero
-  if (tareu==true)scale.tare();
+  if (tareu)scale.tare();
  
   //zeros the scale, as to show you the "absolute" weight, relative to inicialisation weight
-  else if(zero==true)scale.set_offset(zeroofs);
+  else if(zero)scale.set_offset(zeroofs);
  
   //saves current weight, to be checked anytime later by pressing check
-  else if(m==true)saved=weight;
+  else if(m)saved=weight;
 
   //changes units between g/kg|Oz|Lb, doesn't do anything while count mode is active
-  else if(units==true & (millis()-buttontime)>500){
-    unit = !unit;
+  else if(units && (millis()-buttontime)>500){
+    unit !=;
     buttontime = millis();
   }
   
   //shows you the weight saved by M+
-  else if(check==true){
+  else if(check){
     if ((millis()-refreshtime)>500){
     lcd.clear();
     lcd.setCursor(0,0);
@@ -106,15 +106,15 @@ void loop(){
   }
 
   //enables you to measure how many pieces are on the scale after you set weight of 1 piece
-  else if(count==true){
+  else if(count){
     countstate = !countstate;
     if (countstate){
         old = scale.get_units(100);
         lcd.clear();
         lcd.print("place one piece");
         buttontime = millis();
-        while (((millis() - buttontime)<5000) & countstate){
-          if (!debounce(countpin))countstate = !countstate;
+        while (((millis() - buttontime)<5000) && countstate){
+          if (!debounce(countpin))countstate !=;
          }
         weight = scale.get_units(100);
         old = weight - old;
@@ -122,28 +122,28 @@ void loop(){
   }
 
   //after you set the desired weight, it shows you how many percent is on the scale. this value is calculated relative to the current tare weight.
-  else if(perc==true){
-    percstate = !percstate;
+  else if(perc){
+    percstate !=;
     buttontime = millis();
-    while (((millis() - buttontime)<5000) & percstate){
+    while (((millis() - buttontime)<5000) && percstate){
       perc = !debounce(percpin);
       count = !debounce(countpin);
       check = !debounce(checkpin);
       m = !debounce(mpin);
         if (perc){
           buttontime = millis();
-          if (hold) desire = desire + 1;
-          else desire = desire + 0.1;
+          if (hold) desire ++;
+          else desire += 0.1;
         }
         if (check){
           buttontime = millis();
-          if (hold) desire = desire - 1;
-          else desire = desire - 0.1;
+          if (hold) desire --;
+          else desire -= 0.1;
         }
         if (count){
           buttontime = millis() - 5000;
         }
-        if (m) percstate = !percstate;
+        if (m) percstate !=;
       delay (40);
       if ((millis() - refreshtime)<300){
         lcd.clear();
@@ -159,14 +159,14 @@ void loop(){
   }
   
 weight = scale.get_units(50);
-if ((millis()-refreshtime)>250 & !check){
+if ((millis()-refreshtime)>250 && !check){
     display();
     refreshtime = millis();
   }
 }
 
 bool debounce(int pin) {
-  if (digitalRead(pin) == true){
+  if (digitalRead(pin)){
     if (20<(millis() - starttime)<500){
       hold = false;
       previous = true;
@@ -227,7 +227,7 @@ void display(){
             weightPrint = weightPrint - (lbweight*16);
             }
           }
-  if (!countstate & !percstate){
+  if (!countstate && !percstate){
     lcd.clear();
     lcd.setCursor(0,0);
     lcd.print("weight");
